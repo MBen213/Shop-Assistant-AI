@@ -100,3 +100,132 @@ The application consists of the following modules:
 - Notifications
 - Settings
 - AI Assistant (Future Version)
+
+---
+
+# 4. Functional Requirements
+
+## Authentication
+
+The system shall allow users to:
+
+- Login securely
+- Logout
+- Change password
+- Recover account (future version)
+
+---
+
+## Dashboard
+
+The dashboard shall display:
+
+- Today's Sales
+- Monthly Revenue
+- Monthly Expenses
+- Net Profit
+- Low Stock Products
+- Recent Transactions
+
+---
+
+## Products
+
+The system shall allow users to:
+
+- Add Product
+- Edit Product
+- Delete Product (Owner only)
+- Search Product
+- Filter Products
+- Manage Categories
+- Generate Barcode (Future)
+
+---
+
+## Sales
+
+The system shall allow users to:
+
+- Create Sale
+- Edit Sale
+- Cancel Sale
+- Print Invoice
+- View Sales History
+
+---
+
+## Purchases
+
+The system shall allow users to:
+
+- Create Purchase
+- Manage Suppliers
+- Update Inventory Automatically
+
+---
+
+## Inventory
+
+The system shall:
+
+- Track Stock Quantity
+- Alert Low Stock
+- Record Inventory Movement
+- Support Stock Adjustment
+
+---
+
+## Customers
+
+Users shall be able to:
+
+- Add Customer
+- Edit Customer
+- View Purchase History
+- Manage Customer Debts
+
+---
+
+## Suppliers
+
+Users shall be able to:
+
+- Add Supplier
+- Edit Supplier
+- View Purchase History
+- Record Supplier Payments
+
+---
+
+## Expenses
+
+The application shall:
+
+- Record Expenses
+- Categorize Expenses
+- Generate Expense Reports
+
+---
+
+## Reports
+
+The application shall generate:
+
+- Daily Report
+- Weekly Report
+- Monthly Report
+- Profit Report
+- Expense Report
+- Inventory Report
+- Best Selling Products
+
+---
+
+## Backup
+
+The application shall support:
+
+- Local Backup
+- Restore Backup
+- Export Database
