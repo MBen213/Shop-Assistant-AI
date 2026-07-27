@@ -229,3 +229,82 @@ The application shall support:
 - Local Backup
 - Restore Backup
 - Export Database
+
+---
+
+# 5. Business Rules
+
+## BR-001 Product Stock
+
+A product stock quantity shall never become negative.
+
+---
+
+## BR-002 Sales
+
+A sale cannot be completed if one or more products are out of stock.
+
+---
+
+## BR-003 Purchases
+
+Every purchase automatically increases inventory quantity.
+
+---
+
+## BR-004 Expenses
+
+Expenses reduce the calculated business profit but do not affect inventory.
+
+---
+
+## BR-005 Customer Debt
+
+If a customer does not pay the full invoice amount, the remaining balance shall be recorded as customer debt.
+
+---
+
+## BR-006 Supplier Debt
+
+If the shop owner does not fully pay a supplier invoice, the remaining amount shall be recorded as supplier debt.
+
+---
+
+## BR-007 Product Deletion
+
+A product cannot be deleted if it has previous sales or purchase history.
+
+---
+
+## BR-008 User Permissions
+
+Employees cannot:
+
+- Delete products
+- Delete invoices
+- Access financial reports
+- Modify system settings
+
+---
+
+## BR-009 Inventory Alerts
+
+The application shall notify the owner when product quantity reaches the minimum stock level.
+
+---
+
+## BR-010 Profit Calculation
+
+Net Profit = Sales Revenue - Purchase Cost - Expenses
+
+---
+
+## BR-011 Backup
+
+Only the Owner can create or restore backups.
+
+---
+
+## BR-012 Offline Operation
+
+The application must continue working without an internet connection.
