@@ -8,3 +8,31 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Flutter
+.dart_tool/
+.packages
+.pub/
+build/
+
+# Android
+android/.gradle/
+android/local.properties
+
+# iOS
+ios/Flutter/ephemeral/
+ios/Pods/
+
+# macOS
+macos/Flutter/ephemeral/
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+
+# Generated
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
