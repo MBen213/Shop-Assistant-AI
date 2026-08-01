@@ -7,72 +7,65 @@ import '../models/sale_model.dart';
 class SaleLocalDataSource {
   Future<Database> get _db async => DatabaseHelper.instance.database;
 
-  // ============================================================
-  // Get Sales
-  // ============================================================
-
+  /// ==========================
+  /// Get All Sales
+  /// ==========================
   Future<List<SaleModel>> getSales() async {
     final db = await _db;
 
-    final sales = await db.query(
+    final salesResult = await db.query(
       'sales',
       orderBy: 'created_at DESC',
     );
 
-    final List<SaleModel> result = [];
+    List<SaleModel> sales = [];
 
-    for (final sale in sales) {
-      final items = await db.query(
+    for (final saleMap in salesResult) {
+      final itemsResult = await db.query(
         'sale_items',
         where: 'sale_id = ?',
-        whereArgs: [sale['id']],
+        whereArgs: [saleMap['id']],
       );
 
-      result.add(
+      final items = itemsResult
+          .map((e) => SaleItemModel.fromMap(e))
+          .toList();
+
+      sales.add(
         SaleModel.fromMap(
-          sale,
-          items
-              .map((e) => SaleItemModel.fromMap(e))
-              .toList(),
+          saleMap,
+          items,
         ),
       );
     }
 
-    return result;
+    return sales;
   }
 
-  // ============================================================
-  // Complete Sale
-  // ============================================================
-
+  /// ==========================
+  /// Complete Sale
+  /// ==========================
   Future<void> completeSale(SaleModel sale) async {
     final db = await _db;
 
     await db.transaction((txn) async {
-      // حفظ الفاتورة
-
       await txn.insert(
         'sales',
         sale.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
       );
-
-      // حفظ المنتجات وخصم الكمية
 
       for (final item in sale.items) {
         final saleItem = SaleItemModel.fromEntity(item);
 
-        final map = saleItem.toMap();
-
-        map['id'] =
-            '${sale.id}_${item.productId}';
-
-        map['sale_id'] = sale.id;
-
-        map['subtotal'] = item.subtotal;
-
         await txn.insert(
           'sale_items',
-          map,
+          {
+            ...saleItem.toMap(),
+            'sale_id': sale.id,
+            'subtotal': saleItem.subtotal,
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
         );
 
         await txn.rawUpdate(
@@ -82,33 +75,32 @@ class SaleLocalDataSource {
           WHERE id = ?
           ''',
           [
-            item.quantity,
-            item.productId,
+            saleItem.quantity,
+            saleItem.productId,
           ],
         );
       }
     });
   }
 
-  // ============================================================
-  // Delete Sale
-  // ============================================================
-
+  /// ==========================
+  /// Delete Sale
+  /// ==========================
   Future<void> deleteSale(String id) async {
     final db = await _db;
 
-    await db.delete(
-      'sales',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+    await db.transaction((txn) async {
+      await txn.delete(
+        'sale_items',
+        where: 'sale_id = ?',
+        whereArgs: [id],
+      );
 
-  // ============================================================
-  // Compatibility
-  // ============================================================
-
-  Future<void> addSale(SaleModel sale) async {
-    await completeSale(sale);
+      await txn.delete(
+        'sales',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    });
   }
 }

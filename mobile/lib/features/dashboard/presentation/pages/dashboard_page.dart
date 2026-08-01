@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../products/presentation/pages/products_page.dart';
+import '../../../sales/presentation/pages/sales_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -10,6 +11,7 @@ class DashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Shop Assistant AI"),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -32,9 +34,16 @@ class DashboardPage extends StatelessWidget {
             ),
 
             _DashboardButton(
-              icon: Icons.shopping_cart,
+              icon: Icons.shopping_cart_checkout,
               title: "Sales",
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SalesPage(),
+                  ),
+                );
+              },
             ),
 
             _DashboardButton(
@@ -69,20 +78,23 @@ class _DashboardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 4,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 55),
+            Icon(
+              icon,
+              size: 60,
+            ),
             const SizedBox(height: 12),
             Text(
               title,
               style: const TextStyle(
-                fontWeight: FontWeight.bold,
                 fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

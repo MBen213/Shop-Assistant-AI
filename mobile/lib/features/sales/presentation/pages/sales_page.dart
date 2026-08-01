@@ -29,6 +29,7 @@ class _SalesView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sales"),
+        centerTitle: true,
       ),
       body: provider.isLoading
           ? const Center(
@@ -36,17 +37,24 @@ class _SalesView extends StatelessWidget {
             )
           : Column(
               children: [
+                // ==========================
+                // Products
+                // ==========================
+
                 Expanded(
                   flex: 2,
                   child: provider.products.isEmpty
                       ? const Center(
-                          child: Text("No products available"),
+                          child: Text(
+                            "No products available",
+                          ),
                         )
                       : ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: provider.products.length,
                           itemBuilder: (context, index) {
-                            final product = provider.products[index];
+                            final product =
+                                provider.products[index];
 
                             return ProductSelectorTile(
                               product: product,
@@ -60,53 +68,85 @@ class _SalesView extends StatelessWidget {
 
                 const Divider(height: 1),
 
+                // ==========================
+                // Cart
+                // ==========================
+
                 Expanded(
                   flex: 2,
                   child: provider.cart.isEmpty
                       ? const Center(
-                          child: Text("Cart is empty"),
+                          child: Text(
+                            "Cart is empty",
+                          ),
                         )
                       : ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: provider.cart.length,
                           itemBuilder: (context, index) {
-                            final item = provider.cart[index];
+                            final item =
+                                provider.cart[index];
 
                             return CartItemTile(
                               item: item,
                               onIncrease: () {
-                                provider.increaseQuantity(item);
+                                provider.increaseQuantity(
+                                  item,
+                                );
                               },
                               onDecrease: () {
-                                provider.decreaseQuantity(item);
+                                provider.decreaseQuantity(
+                                  item,
+                                );
                               },
                               onRemove: () {
-                                provider.removeItem(item);
+                                provider.removeItem(
+                                  item,
+                                );
                               },
                             );
                           },
                         ),
                 ),
 
+                // ==========================
+                // Total
+                // ==========================
+
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
                   child: CartTotal(
                     total: provider.total,
                   ),
                 ),
 
+                const SizedBox(height: 12),
+
+                // ==========================
+                // Complete Sale Button
+                // ==========================
+
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
                   child: CompleteSaleButton(
                     enabled: provider.cart.isNotEmpty,
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Complete Sale will be implemented next.",
+                    onPressed: () async {
+                      await provider.completeSale();
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Sale completed successfully",
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                   ),
                 ),
