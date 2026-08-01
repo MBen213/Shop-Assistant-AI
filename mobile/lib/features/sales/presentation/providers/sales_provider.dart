@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+
+import '../../../products/domain/entities/product.dart';
+import '../../domain/entities/sale_item.dart';
+
+class SalesProvider extends ChangeNotifier {
+  final List<Product> _products = [];
+  final List<SaleItem> _cart = [];
+
+  List<Product> get products => List.unmodifiable(_products);
+
+  List<SaleItem> get cart => List.unmodifiable(_cart);
+
+  double get total =>
+      _cart.fold(0.0, (sum, item) => sum + item.subtotal);
+
+  void loadProducts(List<Product> products) {
+    _products
+      ..clear()
+      ..addAll(products);
+
+    notifyListeners();
+  }
+
+  void addToCart(Product product) {
+    final index = _cart.indexWhere(
+      (item) => item.productId == product.id,
+    );
+
+    if (index == -1) {
+      _cart.add(
+        SaleItem(
+          productId: product.id,
+          productName: product.name,
+          price: product.sellingPrice,
+          quantity: 1,
+        ),
+      );
+    } else {
+      final current = _cart[index];
+
+      _cart[index] = current.copyWith(
+        quantity: current.quantity + 1,
+      );
+    }
+
+    notifyListeners();
+  }
+
+  void increaseQuantity(SaleItem item) {
+    final index = _cart.indexWhere(
+      (e) => e.productId == item.productId,
+    );
+
+    if (index == -1) return;
+
+    _cart[index] = item.copyWith(
+      quantity: item.quantity + 1,
+    );
+
+    notifyListeners();
+  }
+
+  void decreaseQuantity(SaleItem item) {
+    final index = _cart.indexWhere(
+      (e) => e.productId == item.productId,
+    );
+
+    if (index == -1) return;
+
+    if (item.quantity == 1) {
+      _cart.removeAt(index);
+    } else {
+      _cart[index] = item.copyWith(
+        quantity: item.quantity - 1,
+      );
+    }
+
+    notifyListeners();
+  }
+
+  void removeItem(SaleItem item) {
+    _cart.removeWhere(
+      (e) => e.productId == item.productId,
+    );
+
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _cart.clear();
+    notifyListeners();
+  }
+}

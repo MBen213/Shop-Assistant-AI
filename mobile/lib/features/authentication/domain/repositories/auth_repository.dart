@@ -1,7 +1,5 @@
-import '../entities/user.dart';
-
 abstract class AuthRepository {
-  Future<User> login({
+  Future<bool> login({
     required String email,
     required String password,
   });
