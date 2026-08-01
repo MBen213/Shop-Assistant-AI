@@ -25,10 +25,12 @@ class SaleModel extends Sale {
     List<SaleItemModel> items,
   ) {
     return SaleModel(
-      id: map['id'],
+      id: map['id'] as String,
       items: items,
       total: (map['total'] as num).toDouble(),
-      createdAt: DateTime.parse(map['created_at']),
+      createdAt: DateTime.parse(
+        map['created_at'] as String,
+      ),
     );
   }
 

@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 
+import '../../../products/data/datasource/product_remote_datasource.dart';
+import '../../../products/data/repositories/product_repository_impl.dart';
 import '../../../products/domain/entities/product.dart';
+import '../../../products/domain/usecases/get_products_usecase.dart';
+
 import '../../domain/entities/sale_item.dart';
 
 class SalesProvider extends ChangeNotifier {
+  SalesProvider() {
+    _repository = ProductRepositoryImpl(
+      ProductRemoteDataSource(),
+    );
+
+    _getProductsUseCase = GetProductsUseCase(_repository);
+  }
+
+  late final ProductRepositoryImpl _repository;
+  late final GetProductsUseCase _getProductsUseCase;
+
   final List<Product> _products = [];
   final List<SaleItem> _cart = [];
+
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
 
   List<Product> get products => List.unmodifiable(_products);
 
@@ -14,11 +33,15 @@ class SalesProvider extends ChangeNotifier {
   double get total =>
       _cart.fold(0.0, (sum, item) => sum + item.subtotal);
 
-  void loadProducts(List<Product> products) {
+  Future<void> loadProductsFromDatabase() async {
+    _isLoading = true;
+    notifyListeners();
+
     _products
       ..clear()
-      ..addAll(products);
+      ..addAll(await _getProductsUseCase());
 
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -68,7 +91,7 @@ class SalesProvider extends ChangeNotifier {
 
     if (index == -1) return;
 
-    if (item.quantity == 1) {
+    if (item.quantity <= 1) {
       _cart.removeAt(index);
     } else {
       _cart[index] = item.copyWith(

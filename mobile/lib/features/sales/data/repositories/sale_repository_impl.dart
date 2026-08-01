@@ -14,8 +14,8 @@ class SaleRepositoryImpl implements SaleRepository {
   }
 
   @override
-  Future<void> addSale(Sale sale) async {
-    await localDataSource.addSale(
+  Future<void> completeSale(Sale sale) async {
+    await localDataSource.completeSale(
       SaleModel.fromEntity(sale),
     );
   }
