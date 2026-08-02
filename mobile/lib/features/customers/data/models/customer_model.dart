@@ -23,12 +23,12 @@ class CustomerModel extends Customer {
 
   factory CustomerModel.fromMap(Map<String, dynamic> map) {
     return CustomerModel(
-      id: map['id'],
-      name: map['name'],
-      phone: map['phone'],
-      address: map['address'],
-      notes: map['notes'],
-      debt: (map['debt'] as num).toDouble(),
+      id: map['id'] as String,
+      name: map['name'] as String,
+      phone: map['phone'] as String,
+      address: map['address'] as String?,
+      notes: map['notes'] as String?,
+      debt: ((map['debt'] ?? 0) as num).toDouble(),
     );
   }
 
@@ -40,6 +40,7 @@ class CustomerModel extends Customer {
       'address': address,
       'notes': notes,
       'debt': debt,
+      'created_at': DateTime.now().toIso8601String(),
     };
   }
 }
