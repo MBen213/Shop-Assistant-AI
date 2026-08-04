@@ -1,14 +1,14 @@
-import '../../domain/entities/dashboard_statistics.dart';
+import '../../domain/entities/dashboard_stats.dart';
 import '../../domain/repositories/dashboard_repository.dart';
-import '../datasource/dashboard_remote_datasource.dart';
+import '../datasource/dashboard_local_datasource.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
-  final DashboardRemoteDataSource remoteDataSource;
+  final DashboardLocalDataSource localDataSource;
 
-  DashboardRepositoryImpl(this.remoteDataSource);
+  DashboardRepositoryImpl(this.localDataSource);
 
   @override
-  Future<DashboardStatistics> getStatistics() {
-    return remoteDataSource.getStatistics();
+  Future<DashboardStats> getDashboardStats() {
+    return localDataSource.getDashboardStats();
   }
 }

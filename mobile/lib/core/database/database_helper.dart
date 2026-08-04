@@ -1,6 +1,9 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../features/purchases/data/models/purchase_model.dart';
+import '../../features/purchases/domain/entities/purchase_item.dart';
+
 class DatabaseHelper {
   DatabaseHelper._();
 
@@ -27,7 +30,7 @@ class DatabaseHelper {
 
     return openDatabase(
       path,
-      version: 5,
+      version: 7,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -38,7 +41,6 @@ class DatabaseHelper {
     int version,
   ) async {
     // PRODUCTS
-
     await db.execute('''
 CREATE TABLE products(
 id TEXT PRIMARY KEY,
@@ -51,7 +53,6 @@ quantity INTEGER NOT NULL
 ''');
 
     // SALES
-
     await db.execute('''
 CREATE TABLE sales(
 id TEXT PRIMARY KEY,
@@ -61,7 +62,6 @@ created_at TEXT NOT NULL
 ''');
 
     // SALE ITEMS
-
     await db.execute('''
 CREATE TABLE sale_items(
 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -75,7 +75,6 @@ subtotal REAL NOT NULL
 ''');
 
     // CUSTOMERS
-
     await db.execute('''
 CREATE TABLE customers(
 id TEXT PRIMARY KEY,
@@ -89,7 +88,6 @@ created_at TEXT NOT NULL
 ''');
 
     // SUPPLIERS
-
     await db.execute('''
 CREATE TABLE suppliers(
 id TEXT PRIMARY KEY,
@@ -99,6 +97,53 @@ address TEXT NOT NULL,
 email TEXT NOT NULL
 )
 ''');
+
+    // PURCHASES
+    await db.execute('''
+CREATE TABLE purchases(
+id TEXT PRIMARY KEY,
+supplierId TEXT NOT NULL,
+supplierName TEXT NOT NULL,
+date TEXT NOT NULL
+)
+''');
+
+    // PURCHASE ITEMS
+    await db.execute('''
+CREATE TABLE purchase_items(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+purchaseId TEXT NOT NULL,
+productId TEXT NOT NULL,
+productName TEXT NOT NULL,
+quantity INTEGER NOT NULL,
+purchasePrice REAL NOT NULL
+)
+''');
+// USERS
+await db.execute('''
+CREATE TABLE users(
+id TEXT PRIMARY KEY,
+username TEXT NOT NULL UNIQUE,
+password_hash TEXT NOT NULL,
+full_name TEXT NOT NULL,
+role TEXT NOT NULL,
+is_active INTEGER NOT NULL,
+created_at TEXT NOT NULL
+)
+''');
+
+await db.insert(
+  'users',
+  {
+    'id': 'owner-001',
+    'username': 'admin',
+    'password_hash': 'admin123',
+    'full_name': 'Store Owner',
+    'role': 'owner',
+    'is_active': 1,
+    'created_at': DateTime.now().toIso8601String(),
+  },
+);
   }
 
   Future<void> _onUpgrade(
@@ -167,6 +212,130 @@ email TEXT NOT NULL
 )
 ''');
     }
+
+    if (oldVersion < 6) {
+      await db.execute('''
+CREATE TABLE IF NOT EXISTS purchases(
+id TEXT PRIMARY KEY,
+supplierId TEXT NOT NULL,
+supplierName TEXT NOT NULL,
+date TEXT NOT NULL
+)
+''');
+
+      await db.execute('''
+CREATE TABLE IF NOT EXISTS purchase_items(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+purchaseId TEXT NOT NULL,
+productId TEXT NOT NULL,
+productName TEXT NOT NULL,
+quantity INTEGER NOT NULL,
+purchasePrice REAL NOT NULL
+)
+''');
+    }
+
+    if (oldVersion < 7) {
+  await db.execute('''
+CREATE TABLE IF NOT EXISTS users(
+id TEXT PRIMARY KEY,
+username TEXT NOT NULL UNIQUE,
+password_hash TEXT NOT NULL,
+full_name TEXT NOT NULL,
+role TEXT NOT NULL,
+is_active INTEGER NOT NULL,
+created_at TEXT NOT NULL
+)
+''');
+
+  final existing = await db.query(
+    'users',
+    where: 'username = ?',
+    whereArgs: ['admin'],
+  );
+
+  if (existing.isEmpty) {
+    await db.insert(
+      'users',
+      {
+        'id': 'owner-001',
+        'username': 'admin',
+        'password_hash': 'admin123',
+        'full_name': 'Store Owner',
+        'role': 'owner',
+        'is_active': 1,
+        'created_at': DateTime.now().toIso8601String(),
+      },
+    );
+  }
+}
+  }
+
+  // ===========================
+  // PURCHASE METHODS
+  // ===========================
+
+  Future<void> insertPurchase(
+    PurchaseModel purchase,
+  ) async {
+    final db = await database;
+
+    await db.insert(
+      'purchases',
+      purchase.toMap(),
+    );
+
+    for (final PurchaseItem item in purchase.items) {
+      await db.insert(
+        'purchase_items',
+        {
+          'purchaseId': purchase.id,
+          'productId': item.productId,
+          'productName': item.productName,
+          'quantity': item.quantity,
+          'purchasePrice': item.purchasePrice,
+        },
+      );
+    }
+  }
+
+  Future<void> deletePurchase(
+    String id,
+  ) async {
+    final db = await database;
+
+    await db.delete(
+      'purchase_items',
+      where: 'purchaseId = ?',
+      whereArgs: [id],
+    );
+
+    await db.delete(
+      'purchases',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getPurchases() async {
+    final db = await database;
+
+    return await db.query(
+      'purchases',
+      orderBy: 'date DESC',
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getPurchaseItems(
+    String purchaseId,
+  ) async {
+    final db = await database;
+
+    return await db.query(
+      'purchase_items',
+      where: 'purchaseId = ?',
+      whereArgs: [purchaseId],
+    );
   }
 
   Future<void> closeDatabase() async {

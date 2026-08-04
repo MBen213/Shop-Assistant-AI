@@ -1,5 +1,5 @@
-import '../entities/dashboard_statistics.dart';
+import '../entities/dashboard_stats.dart';
 
 abstract class DashboardRepository {
-  Future<DashboardStatistics> getStatistics();
+  Future<DashboardStats> getDashboardStats();
 }

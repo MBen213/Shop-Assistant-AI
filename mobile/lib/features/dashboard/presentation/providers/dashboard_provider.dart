@@ -1,29 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../../data/datasource/dashboard_remote_datasource.dart';
-import '../../data/repositories/dashboard_repository_impl.dart';
-import '../../domain/entities/dashboard_statistics.dart';
-import '../../domain/usecases/get_dashboard_statistics.dart';
+import '../../domain/entities/dashboard_stats.dart';
+import '../../domain/usecases/get_dashboard_stats_usecase.dart';
 
 class DashboardProvider extends ChangeNotifier {
-  DashboardStatistics? statistics;
+  DashboardProvider({
+    required this.getDashboardStatsUseCase,
+  });
 
-  bool isLoading = false;
+  final GetDashboardStatsUseCase getDashboardStatsUseCase;
 
-  final GetDashboardStatistics _getStatistics =
-      GetDashboardStatistics(
-        DashboardRepositoryImpl(
-          DashboardRemoteDataSource(),
-        ),
-      );
+  DashboardStats _stats = DashboardStats.empty();
+  DashboardStats get stats => _stats;
+
+  bool _loading = false;
+  bool get loading => _loading;
+
+  String? _error;
+  String? get error => _error;
 
   Future<void> loadDashboard() async {
-    isLoading = true;
-    notifyListeners();
+    try {
+      _loading = true;
+      _error = null;
+      notifyListeners();
 
-    statistics = await _getStatistics();
+      _stats = await getDashboardStatsUseCase();
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
 
-    isLoading = false;
-    notifyListeners();
+  Future<void> refresh() async {
+    await loadDashboard();
   }
 }

@@ -26,90 +26,136 @@ class ProductForm extends StatefulWidget {
 class _ProductFormState extends State<ProductForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final nameController = TextEditingController();
-  final barcodeController = TextEditingController();
-  final purchaseController = TextEditingController();
-  final sellingController = TextEditingController();
-  final quantityController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _barcodeController = TextEditingController();
+  final _purchaseController = TextEditingController();
+  final _sellingController = TextEditingController();
+  final _quantityController = TextEditingController();
 
-  bool isSaving = false;
+  bool _isSaving = false;
+
+  bool get _isEditing => widget.product != null;
+
+  String get _title => _isEditing ? 'Edit Product' : 'Add Product';
+
+  String get _buttonText =>
+      _isEditing ? 'Update Product' : 'Add Product';
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.product != null) {
-      nameController.text = widget.product!.name;
-      barcodeController.text = widget.product!.barcode;
-      purchaseController.text =
-          widget.product!.purchasePrice.toString();
-      sellingController.text =
-          widget.product!.sellingPrice.toString();
-      quantityController.text =
-          widget.product!.quantity.toString();
+    final product = widget.product;
+
+    if (product != null) {
+      _nameController.text = product.name;
+      _barcodeController.text = product.barcode;
+      _purchaseController.text = product.purchasePrice.toString();
+      _sellingController.text = product.sellingPrice.toString();
+      _quantityController.text = product.quantity.toString();
     }
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    barcodeController.dispose();
-    purchaseController.dispose();
-    sellingController.dispose();
-    quantityController.dispose();
+    _nameController.dispose();
+    _barcodeController.dispose();
+    _purchaseController.dispose();
+    _sellingController.dispose();
+    _quantityController.dispose();
     super.dispose();
   }
 
-  Future<void> save() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() {
-      isSaving = true;
-    });
-
-    await widget.onSave(
-      name: nameController.text.trim(),
-      barcode: barcodeController.text.trim(),
-      purchasePrice: double.parse(purchaseController.text),
-      sellingPrice: double.parse(sellingController.text),
-      quantity: int.parse(quantityController.text),
-    );
-
-    if (!mounted) return;
-
-    setState(() {
-      isSaving = false;
-    });
-
-    Navigator.pop(context); // إغلاق النافذة بعد نجاح الحفظ
-  }
-
-  InputDecoration input(String label) {
+  InputDecoration _inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
       border: const OutlineInputBorder(),
     );
   }
 
+  String? _requiredValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Required';
+    }
+    return null;
+  }
+
+  String? _doubleValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Required';
+    }
+
+    if (double.tryParse(value) == null) {
+      return 'Invalid number';
+    }
+
+    return null;
+  }
+
+  String? _intValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Required';
+    }
+
+    if (int.tryParse(value) == null) {
+      return 'Invalid number';
+    }
+
+    return null;
+  }
+
+  Future<void> _save() async {
+    if (_isSaving) return;
+
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      await widget.onSave(
+        name: _nameController.text.trim(),
+        barcode: _barcodeController.text.trim(),
+        purchasePrice: double.parse(_purchaseController.text.trim()),
+        sellingPrice: double.parse(_sellingController.text.trim()),
+        quantity: int.parse(_quantityController.text.trim()),
+      );
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      padding: EdgeInsets.fromLTRB(
+        16,
+        16,
+        16,
+        bottomInset + 16,
       ),
       child: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                widget.product == null
-                    ? "Add Product"
-                    : "Edit Product",
+                _title,
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -119,65 +165,63 @@ class _ProductFormState extends State<ProductForm> {
               const SizedBox(height: 20),
 
               TextFormField(
-                controller: nameController,
-                decoration: input("Product Name"),
-                validator: (v) =>
-                    v == null || v.isEmpty ? "Required" : null,
+                controller: _nameController,
+                decoration: _inputDecoration('Product Name'),
+                validator: _requiredValidator,
+                textInputAction: TextInputAction.next,
               ),
 
               const SizedBox(height: 12),
 
               TextFormField(
-                controller: barcodeController,
-                decoration: input("Barcode"),
+                controller: _barcodeController,
+                decoration: _inputDecoration('Barcode'),
+                textInputAction: TextInputAction.next,
               ),
 
               const SizedBox(height: 12),
 
               TextFormField(
-                controller: purchaseController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: input("Purchase Price"),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return "Required";
-                  if (double.tryParse(v) == null) return "Invalid number";
-                  return null;
-                },
+                controller: _purchaseController,
+                decoration: _inputDecoration('Purchase Price'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: _doubleValidator,
+                textInputAction: TextInputAction.next,
               ),
 
               const SizedBox(height: 12),
 
               TextFormField(
-                controller: sellingController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: input("Selling Price"),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return "Required";
-                  if (double.tryParse(v) == null) return "Invalid number";
-                  return null;
-                },
+                controller: _sellingController,
+                decoration: _inputDecoration('Selling Price'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: _doubleValidator,
+                textInputAction: TextInputAction.next,
               ),
 
               const SizedBox(height: 12),
 
               TextFormField(
-                controller: quantityController,
+                controller: _quantityController,
+                decoration: _inputDecoration('Quantity'),
                 keyboardType: TextInputType.number,
-                decoration: input("Quantity"),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return "Required";
-                  if (int.tryParse(v) == null) return "Invalid number";
-                  return null;
-                },
+                validator: _intValidator,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => _save(),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
               SizedBox(
                 width: double.infinity,
+                height: 50,
                 child: FilledButton(
-                  onPressed: isSaving ? null : save,
-                  child: isSaving
+                  onPressed: _isSaving ? null : _save,
+                  child: _isSaving
                       ? const SizedBox(
                           width: 22,
                           height: 22,
@@ -186,11 +230,7 @@ class _ProductFormState extends State<ProductForm> {
                             color: Colors.white,
                           ),
                         )
-                      : Text(
-                          widget.product == null
-                              ? "Add Product"
-                              : "Update Product",
-                        ),
+                      : Text(_buttonText),
                 ),
               ),
             ],
