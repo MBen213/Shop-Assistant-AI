@@ -344,4 +344,132 @@ created_at TEXT NOT NULL
       _database = null;
     }
   }
+
+  // ===========================
+// DASHBOARD STATISTICS
+// ===========================
+
+Future<int> getProductsCount() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT COUNT(*) FROM products',
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+
+Future<int> getCustomersCount() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT COUNT(*) FROM customers',
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+
+Future<int> getSuppliersCount() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT COUNT(*) FROM suppliers',
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+
+Future<int> getSalesCount() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT COUNT(*) FROM sales',
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+
+Future<int> getPurchasesCount() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT COUNT(*) FROM purchases',
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+
+Future<double> getRevenue() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT SUM(total) FROM sales',
+  );
+
+  final value = result.first.values.first;
+
+  if (value == null) {
+    return 0;
+  }
+
+  return (value as num).toDouble();
+}
+
+Future<int> getLowStockProductsCount() async {
+  final db = await database;
+
+  final result = await db.rawQuery(
+    'SELECT COUNT(*) FROM products WHERE quantity <= 5',
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+// ===========================
+// TODAY STATISTICS
+// ===========================
+
+Future<int> getTodaySalesCount() async {
+  final db = await database;
+
+  final today = DateTime.now().toIso8601String().substring(0, 10);
+
+  final result = await db.rawQuery(
+    '''
+    SELECT COUNT(*)
+    FROM sales
+    WHERE substr(created_at,1,10)=?
+    ''',
+    [today],
+  );
+
+  return Sqflite.firstIntValue(result) ?? 0;
+}
+
+Future<double> getTodayRevenue() async {
+  final db = await database;
+
+  final today = DateTime.now().toIso8601String().substring(0, 10);
+
+  final result = await db.rawQuery(
+    '''
+   SELECT SUM(total)
+   FROM sales
+   WHERE substr(created_at,1,10)=?
+   ''',
+    [today],
+  );
+
+  final value = result.first.values.first;
+
+  if (value == null) {
+    return 0;
+  }
+
+  return (value as num).toDouble();
+}
+
+Future<double> getTodayProfit() async {
+  
+  return 0;
+}
 }

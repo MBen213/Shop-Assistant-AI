@@ -3,9 +3,15 @@ class DashboardStats {
   final int totalCustomers;
   final int totalSuppliers;
   final int totalSales;
+
   final double totalRevenue;
-  final double totalPurchases;
+
   final int lowStockProducts;
+
+  // Today's Statistics
+  final int todaySales;
+  final double todayRevenue;
+  final double todayProfit;
 
   const DashboardStats({
     required this.totalProducts,
@@ -13,8 +19,10 @@ class DashboardStats {
     required this.totalSuppliers,
     required this.totalSales,
     required this.totalRevenue,
-    required this.totalPurchases,
     required this.lowStockProducts,
+    required this.todaySales,
+    required this.todayRevenue,
+    required this.todayProfit,
   });
 
   factory DashboardStats.empty() {
@@ -24,8 +32,10 @@ class DashboardStats {
       totalSuppliers: 0,
       totalSales: 0,
       totalRevenue: 0,
-      totalPurchases: 0,
       lowStockProducts: 0,
+      todaySales: 0,
+      todayRevenue: 0,
+      todayProfit: 0,
     );
   }
 }

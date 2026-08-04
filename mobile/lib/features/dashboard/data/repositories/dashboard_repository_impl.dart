@@ -1,5 +1,6 @@
 import '../../domain/entities/dashboard_stats.dart';
 import '../../domain/repositories/dashboard_repository.dart';
+
 import '../datasource/dashboard_local_datasource.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
@@ -8,7 +9,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
   DashboardRepositoryImpl(this.localDataSource);
 
   @override
-  Future<DashboardStats> getDashboardStats() {
-    return localDataSource.getDashboardStats();
+  Future<DashboardStats> getDashboardStats() async {
+    return await localDataSource.getDashboardStats();
   }
 }

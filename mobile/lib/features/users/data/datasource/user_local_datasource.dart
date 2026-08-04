@@ -42,9 +42,7 @@ class UserLocalDataSource {
       orderBy: 'full_name ASC',
     );
 
-    return result
-        .map((e) => UserModel.fromMap(e))
-        .toList();
+    return result.map((e) => UserModel.fromMap(e)).toList();
   }
 
   Future<UserModel?> getUserByUsername(
@@ -72,30 +70,6 @@ class UserLocalDataSource {
   }) async {
     final db = await _databaseHelper.database;
 
-    // ==========================
-    // Debug
-    // ==========================
-
-    final allUsers = await db.query('users');
-
-    print('');
-    print('========== USERS TABLE ==========');
-
-    if (allUsers.isEmpty) {
-      print('No users found in database');
-    } else {
-      for (final user in allUsers) {
-        print(user);
-      }
-    }
-
-    print('=================================');
-    print('Trying login with:');
-    print('Username: $username');
-    print('Password: $password');
-
-    // ==========================
-
     final result = await db.query(
       'users',
       where: 'username = ? AND password_hash = ? AND is_active = 1',
@@ -107,11 +81,8 @@ class UserLocalDataSource {
     );
 
     if (result.isEmpty) {
-      print('❌ LOGIN FAILED');
       return null;
     }
-
-    print('✅ LOGIN SUCCESS');
 
     return UserModel.fromMap(result.first);
   }
@@ -132,6 +103,5 @@ class UserLocalDataSource {
     );
   }
 
-  Future<void> logout() async {
-  }
+  Future<void> logout() async {}
 }
