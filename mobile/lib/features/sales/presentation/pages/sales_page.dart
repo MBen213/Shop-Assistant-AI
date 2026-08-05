@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/sales_provider.dart';
+
 import '../widgets/cart_item_tile.dart';
 import '../widgets/cart_total.dart';
 import '../widgets/complete_sale_button.dart';
 import '../widgets/product_selector_tile.dart';
+import '../widgets/checkout/checkout_bottom_sheet.dart';
 
 class SalesPage extends StatelessWidget {
   const SalesPage({super.key});
@@ -28,8 +30,8 @@ class _SalesView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sales"),
         centerTitle: true,
+        title: const Text("Sales"),
       ),
       body: provider.isLoading
           ? const Center(
@@ -37,24 +39,85 @@ class _SalesView extends StatelessWidget {
             )
           : Column(
               children: [
-                // ==========================
-                // Products
-                // ==========================
+                //============================
+                // Search
+                //============================
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    16,
+                    16,
+                    16,
+                    8,
+                  ),
+                  child: TextField(
+                    onChanged: provider.searchProducts,
+                    decoration: InputDecoration(
+                      hintText: "Search product...",
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: provider.searchQuery.isEmpty
+                          ? null
+                          : IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: provider.clearSearch,
+                            ),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                  ),
+                ),
+
+                //============================
+                // Products Header
+                //============================
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Products (${provider.products.length})",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      Chip(
+                        avatar: const Icon(
+                          Icons.shopping_cart,
+                          size: 18,
+                        ),
+                        label: Text(
+                          "${provider.cartItemsCount} Items",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                //============================
+                // Products List
+                //============================
 
                 Expanded(
                   flex: 2,
                   child: provider.products.isEmpty
                       ? const Center(
                           child: Text(
-                            "No products available",
+                            "No products found",
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.all(16),
                           itemCount: provider.products.length,
                           itemBuilder: (context, index) {
-                            final product =
-                                provider.products[index];
+                            final product = provider.products[index];
 
                             return ProductSelectorTile(
                               product: product,
@@ -66,11 +129,47 @@ class _SalesView extends StatelessWidget {
                         ),
                 ),
 
-                const Divider(height: 1),
+                const Divider(),
 
-                // ==========================
-                // Cart
-                // ==========================
+                //============================
+                // Cart Header
+                //============================
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Cart (${provider.cartItemsCount})",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (provider.cart.isNotEmpty)
+                        TextButton.icon(
+                          onPressed: provider.clearCart,
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            color: Colors.red,
+                          ),
+                          label: const Text(
+                            "Clear",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                //============================
+                // Cart List
+                //============================
 
                 Expanded(
                   flex: 2,
@@ -81,37 +180,29 @@ class _SalesView extends StatelessWidget {
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.all(16),
                           itemCount: provider.cart.length,
                           itemBuilder: (context, index) {
-                            final item =
-                                provider.cart[index];
+                            final item = provider.cart[index];
 
                             return CartItemTile(
                               item: item,
                               onIncrease: () {
-                                provider.increaseQuantity(
-                                  item,
-                                );
+                                provider.increaseQuantity(item);
                               },
                               onDecrease: () {
-                                provider.decreaseQuantity(
-                                  item,
-                                );
+                                provider.decreaseQuantity(item);
                               },
                               onRemove: () {
-                                provider.removeItem(
-                                  item,
-                                );
+                                provider.removeItem(item);
                               },
                             );
                           },
                         ),
                 ),
 
-                // ==========================
+                //============================
                 // Total
-                // ==========================
+                //============================
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -124,9 +215,9 @@ class _SalesView extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                // ==========================
-                // Complete Sale Button
-                // ==========================
+                //============================
+                // Checkout Button
+                //============================
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -134,19 +225,35 @@ class _SalesView extends StatelessWidget {
                   ),
                   child: CompleteSaleButton(
                     enabled: provider.cart.isNotEmpty,
-                    onPressed: () async {
-                      await provider.completeSale();
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Sale completed successfully",
-                            ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(24),
                           ),
-                        );
-                      }
+                        ),
+                        builder: (_) => CheckoutBottomSheet(
+                          total: provider.total,
+                          onConfirm: () async {
+                            await provider.completeSale();
+
+                            if (context.mounted) {
+                              Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Sale completed successfully",
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
                     },
                   ),
                 ),
