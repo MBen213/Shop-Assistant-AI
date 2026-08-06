@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/router/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../../users/presentation/providers/auth_provider.dart';
 
@@ -17,13 +18,13 @@ import '../widgets/quick_actions.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/today_overview.dart';
 
-import 'package:mobile/l10n/app_localizations.dart';
-
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final authProvider = context.watch<AuthProvider>();
     final currentUser = authProvider.currentUser;
 
@@ -41,9 +42,7 @@ class DashboardPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(                                             
-              AppLocalizations.of(context)!.dashboard,
-            ),
+            title: Text(l10n.dashboard),
             centerTitle: true,
             actions: [
               IconButton(
@@ -69,9 +68,7 @@ class DashboardPage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 DashboardWelcome(
-                  userName:
-                      currentUser?.fullName ??
-                      "Store Owner",
+                  userName: currentUser?.fullName ?? "",
                 ),
 
                 const SizedBox(height: 20),
@@ -87,8 +84,7 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            const SalesPage(),
+                        builder: (_) => const SalesPage(),
                       ),
                     );
                   },
@@ -96,8 +92,7 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            const ProductsPage(),
+                        builder: (_) => const ProductsPage(),
                       ),
                     );
                   },
@@ -105,8 +100,7 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            const CustomersPage(),
+                        builder: (_) => const CustomersPage(),
                       ),
                     );
                   },
@@ -114,8 +108,7 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            const SuppliersPage(),
+                        builder: (_) => const SuppliersPage(),
                       ),
                     );
                   },
@@ -125,53 +118,46 @@ class DashboardPage extends StatelessWidget {
 
                 GridView.count(
                   shrinkWrap: true,
-                  physics:
-                      const NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
                   childAspectRatio: 0.95,
                   children: [
                     StatCard(
-                      title: "Products",
-                      value:
-                          stats.totalProducts.toString(),
+                      title: l10n.products,
+                      value: stats.totalProducts.toString(),
                       icon: Icons.inventory_2,
                       color: Colors.blue,
                     ),
                     StatCard(
-                      title: "Customers",
-                      value:
-                          stats.totalCustomers.toString(),
+                      title: l10n.customers,
+                      value: stats.totalCustomers.toString(),
                       icon: Icons.people,
                       color: Colors.orange,
                     ),
                     StatCard(
-                      title: "Suppliers",
-                      value:
-                          stats.totalSuppliers.toString(),
+                      title: l10n.suppliers,
+                      value: stats.totalSuppliers.toString(),
                       icon: Icons.local_shipping,
                       color: Colors.indigo,
                     ),
                     StatCard(
-                      title: "Sales",
-                      value:
-                          stats.totalSales.toString(),
+                      title: l10n.sales,
+                      value: stats.totalSales.toString(),
                       icon: Icons.shopping_cart,
                       color: Colors.green,
                     ),
                     StatCard(
-                      title: "Revenue",
+                      title: l10n.revenue,
                       value:
                           "${stats.totalRevenue.toStringAsFixed(2)} DA",
                       icon: Icons.payments,
                       color: Colors.teal,
                     ),
                     StatCard(
-                      title: "Low Stock",
-                      value: stats
-                          .lowStockProducts
-                          .toString(),
+                      title: l10n.lowStock,
+                      value: stats.lowStockProducts.toString(),
                       icon: Icons.warning_amber_rounded,
                       color: Colors.red,
                     ),

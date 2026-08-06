@@ -1,6 +1,8 @@
 {
   "@@locale": "en",
 
+  "appName": "Shop Assistant AI",
+
   "dashboard": "Dashboard",
   "settings": "Settings",
 
@@ -8,12 +10,10 @@
   "storeOwner": "Store Owner",
 
   "todayOverview": "Today's Overview",
-
   "quickActions": "Quick Actions",
 
   "todaySales": "Today's Sales",
   "todayProfit": "Today's Profit",
-
   "revenue": "Revenue",
 
   "products": "Products",
@@ -22,8 +22,52 @@
   "sales": "Sales",
   "lowStock": "Low Stock",
 
+  "inventory": "Inventory",
+  "reports": "Reports",
+  "purchases": "Purchases",
+  "receipt": "Receipt",
+  "invoice": "Invoice",
+
   "addProduct": "Add Product",
   "newSale": "New Sale",
   "addCustomer": "Add Customer",
-  "addSupplier": "Add Supplier"
+  "addSupplier": "Add Supplier",
+
+  "login": "Login",
+  "logout": "Logout",
+  "email": "Email",
+  "password": "Password",
+  "username": "Username",
+
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "close": "Close",
+
+  "refresh": "Refresh",
+
+  "search": "Search",
+
+  "cash": "Cash",
+  "card": "Card",
+
+  "total": "Total",
+  "subtotal": "Subtotal",
+  "quantity": "Quantity",
+  "price": "Price",
+  "profit": "Profit",
+
+  "yes": "Yes",
+  "no": "No",
+
+  "loading": "Loading...",
+  "noData": "No Data",
+
+  "language": "Language",
+  "theme": "Theme",
+
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark"
 }

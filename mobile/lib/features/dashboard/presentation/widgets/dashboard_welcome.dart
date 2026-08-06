@@ -14,6 +14,11 @@ class DashboardWelcome extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    final displayName =
+        userName.trim().isEmpty
+            ? l10n.storeOwner
+            : userName;
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -48,9 +53,7 @@ class DashboardWelcome extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   Text(
-                    userName.isEmpty
-                        ? l10n.storeOwner
-                        : userName,
+                    displayName,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

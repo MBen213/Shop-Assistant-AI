@@ -9,6 +9,9 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get appName => 'مساعد المتجر الذكي';
+
+  @override
   String get dashboard => 'لوحة التحكم';
 
   @override
@@ -51,6 +54,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get lowStock => 'مخزون منخفض';
 
   @override
+  String get inventory => 'المخزون';
+
+  @override
+  String get reports => 'التقارير';
+
+  @override
+  String get purchases => 'المشتريات';
+
+  @override
+  String get receipt => 'الإيصال';
+
+  @override
+  String get invoice => 'الفاتورة';
+
+  @override
   String get addProduct => 'إضافة منتج';
 
   @override
@@ -61,4 +79,88 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addSupplier => 'إضافة مورد';
+
+  @override
+  String get login => 'تسجيل الدخول';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get username => 'اسم المستخدم';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
+  String get refresh => 'تحديث';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get cash => 'نقدًا';
+
+  @override
+  String get card => 'بطاقة';
+
+  @override
+  String get total => 'الإجمالي';
+
+  @override
+  String get subtotal => 'المجموع الفرعي';
+
+  @override
+  String get quantity => 'الكمية';
+
+  @override
+  String get price => 'السعر';
+
+  @override
+  String get profit => 'الربح';
+
+  @override
+  String get yes => 'نعم';
+
+  @override
+  String get no => 'لا';
+
+  @override
+  String get loading => 'جارٍ التحميل...';
+
+  @override
+  String get noData => 'لا توجد بيانات';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get theme => 'المظهر';
+
+  @override
+  String get system => 'النظام';
+
+  @override
+  String get light => 'فاتح';
+
+  @override
+  String get dark => 'داكن';
 }

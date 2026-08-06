@@ -1,6 +1,8 @@
 {
   "@@locale": "fr",
 
+  "appName": "Shop Assistant AI",
+
   "dashboard": "Tableau de bord",
   "settings": "Paramètres",
 
@@ -8,12 +10,10 @@
   "storeOwner": "Propriétaire",
 
   "todayOverview": "Aperçu du jour",
-
   "quickActions": "Actions rapides",
 
   "todaySales": "Ventes du jour",
   "todayProfit": "Profit du jour",
-
   "revenue": "Revenu",
 
   "products": "Produits",
@@ -22,8 +22,52 @@
   "sales": "Ventes",
   "lowStock": "Stock faible",
 
+  "inventory": "Stock",
+  "reports": "Rapports",
+  "purchases": "Achats",
+  "receipt": "Reçu",
+  "invoice": "Facture",
+
   "addProduct": "Ajouter un produit",
   "newSale": "Nouvelle vente",
   "addCustomer": "Ajouter un client",
-  "addSupplier": "Ajouter un fournisseur"
+  "addSupplier": "Ajouter un fournisseur",
+
+  "login": "Connexion",
+  "logout": "Déconnexion",
+  "email": "E-mail",
+  "password": "Mot de passe",
+  "username": "Nom d'utilisateur",
+
+  "cancel": "Annuler",
+  "save": "Enregistrer",
+  "delete": "Supprimer",
+  "edit": "Modifier",
+  "close": "Fermer",
+
+  "refresh": "Actualiser",
+
+  "search": "Rechercher",
+
+  "cash": "Espèces",
+  "card": "Carte",
+
+  "total": "Total",
+  "subtotal": "Sous-total",
+  "quantity": "Quantité",
+  "price": "Prix",
+  "profit": "Bénéfice",
+
+  "yes": "Oui",
+  "no": "Non",
+
+  "loading": "Chargement...",
+  "noData": "Aucune donnée",
+
+  "language": "Langue",
+  "theme": "Thème",
+
+  "system": "Système",
+  "light": "Clair",
+  "dark": "Sombre"
 }

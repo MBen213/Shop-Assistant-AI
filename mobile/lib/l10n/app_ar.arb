@@ -1,6 +1,8 @@
 {
   "@@locale": "ar",
 
+  "appName": "مساعد المتجر الذكي",
+
   "dashboard": "لوحة التحكم",
   "settings": "الإعدادات",
 
@@ -8,12 +10,10 @@
   "storeOwner": "صاحب المتجر",
 
   "todayOverview": "ملخص اليوم",
-
   "quickActions": "الإجراءات السريعة",
 
   "todaySales": "مبيعات اليوم",
   "todayProfit": "ربح اليوم",
-
   "revenue": "الإيرادات",
 
   "products": "المنتجات",
@@ -22,8 +22,52 @@
   "sales": "المبيعات",
   "lowStock": "مخزون منخفض",
 
+  "inventory": "المخزون",
+  "reports": "التقارير",
+  "purchases": "المشتريات",
+  "receipt": "الإيصال",
+  "invoice": "الفاتورة",
+
   "addProduct": "إضافة منتج",
   "newSale": "بيع جديد",
   "addCustomer": "إضافة عميل",
-  "addSupplier": "إضافة مورد"
+  "addSupplier": "إضافة مورد",
+
+  "login": "تسجيل الدخول",
+  "logout": "تسجيل الخروج",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "username": "اسم المستخدم",
+
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "delete": "حذف",
+  "edit": "تعديل",
+  "close": "إغلاق",
+
+  "refresh": "تحديث",
+
+  "search": "بحث",
+
+  "cash": "نقدًا",
+  "card": "بطاقة",
+
+  "total": "الإجمالي",
+  "subtotal": "المجموع الفرعي",
+  "quantity": "الكمية",
+  "price": "السعر",
+  "profit": "الربح",
+
+  "yes": "نعم",
+  "no": "لا",
+
+  "loading": "جارٍ التحميل...",
+  "noData": "لا توجد بيانات",
+
+  "language": "اللغة",
+  "theme": "المظهر",
+
+  "system": "النظام",
+  "light": "فاتح",
+  "dark": "داكن"
 }

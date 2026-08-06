@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/l10n/app_localizations.dart';
 
 class QuickActions extends StatelessWidget {
   final VoidCallback onNewSale;
@@ -16,12 +17,16 @@ class QuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Quick Actions",
-          style: Theme.of(context).textTheme.titleLarge,
+          l10n.quickActions,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
 
         const SizedBox(height: 16),
@@ -35,25 +40,28 @@ class QuickActions extends StatelessWidget {
           childAspectRatio: 1.6,
           children: [
             _QuickActionCard(
-              title: "New Sale",
+              title: l10n.newSale,
               icon: Icons.point_of_sale,
               color: Colors.green,
               onTap: onNewSale,
             ),
+
             _QuickActionCard(
-              title: "Add Product",
+              title: l10n.addProduct,
               icon: Icons.inventory_2,
               color: Colors.blue,
               onTap: onAddProduct,
             ),
+
             _QuickActionCard(
-              title: "Add Customer",
+              title: l10n.addCustomer,
               icon: Icons.people,
               color: Colors.orange,
               onTap: onAddCustomer,
             ),
+
             _QuickActionCard(
-              title: "Add Supplier",
+              title: l10n.addSupplier,
               icon: Icons.local_shipping,
               color: Colors.indigo,
               onTap: onAddSupplier,
@@ -96,13 +104,15 @@ class _QuickActionCard extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: color.withValues(alpha: 0.15),
+                backgroundColor: color.withOpacity(.15),
                 child: Icon(
                   icon,
                   color: color,
                 ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
                 child: Text(
                   title,
