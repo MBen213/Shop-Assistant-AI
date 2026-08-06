@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../app/router/app_router.dart';
+
 import '../../../users/presentation/providers/auth_provider.dart';
 
 import '../../../products/presentation/pages/products_page.dart';
@@ -14,6 +16,8 @@ import '../widgets/dashboard_welcome.dart';
 import '../widgets/quick_actions.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/today_overview.dart';
+
+import 'package:mobile/l10n/app_localizations.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -37,11 +41,24 @@ class DashboardPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Dashboard"),
+            title: Text(                                             
+              AppLocalizations.of(context)!.dashboard,
+            ),
             centerTitle: true,
             actions: [
               IconButton(
+                icon: const Icon(Icons.settings),
+                tooltip: "Settings",
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    AppRouter.appSettings,
+                  );
+                },
+              ),
+              IconButton(
                 icon: const Icon(Icons.refresh),
+                tooltip: "Refresh",
                 onPressed: provider.refresh,
               ),
             ],
@@ -52,13 +69,15 @@ class DashboardPage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 DashboardWelcome(
-                  userName: currentUser?.fullName ?? "Store Owner",
+                  userName:
+                      currentUser?.fullName ??
+                      "Store Owner",
                 ),
 
                 const SizedBox(height: 20),
 
                 TodayOverview(
-                 stats: stats,
+                  stats: stats,
                 ),
 
                 const SizedBox(height: 24),
@@ -68,7 +87,8 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const SalesPage(),
+                        builder: (_) =>
+                            const SalesPage(),
                       ),
                     );
                   },
@@ -76,7 +96,8 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const ProductsPage(),
+                        builder: (_) =>
+                            const ProductsPage(),
                       ),
                     );
                   },
@@ -84,7 +105,8 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const CustomersPage(),
+                        builder: (_) =>
+                            const CustomersPage(),
                       ),
                     );
                   },
@@ -92,7 +114,8 @@ class DashboardPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const SuppliersPage(),
+                        builder: (_) =>
+                            const SuppliersPage(),
                       ),
                     );
                   },
@@ -102,7 +125,8 @@ class DashboardPage extends StatelessWidget {
 
                 GridView.count(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics:
+                      const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
@@ -110,25 +134,29 @@ class DashboardPage extends StatelessWidget {
                   children: [
                     StatCard(
                       title: "Products",
-                      value: stats.totalProducts.toString(),
+                      value:
+                          stats.totalProducts.toString(),
                       icon: Icons.inventory_2,
                       color: Colors.blue,
                     ),
                     StatCard(
                       title: "Customers",
-                      value: stats.totalCustomers.toString(),
+                      value:
+                          stats.totalCustomers.toString(),
                       icon: Icons.people,
                       color: Colors.orange,
                     ),
                     StatCard(
                       title: "Suppliers",
-                      value: stats.totalSuppliers.toString(),
+                      value:
+                          stats.totalSuppliers.toString(),
                       icon: Icons.local_shipping,
                       color: Colors.indigo,
                     ),
                     StatCard(
                       title: "Sales",
-                      value: stats.totalSales.toString(),
+                      value:
+                          stats.totalSales.toString(),
                       icon: Icons.shopping_cart,
                       color: Colors.green,
                     ),
@@ -141,7 +169,9 @@ class DashboardPage extends StatelessWidget {
                     ),
                     StatCard(
                       title: "Low Stock",
-                      value: stats.lowStockProducts.toString(),
+                      value: stats
+                          .lowStockProducts
+                          .toString(),
                       icon: Icons.warning_amber_rounded,
                       color: Colors.red,
                     ),

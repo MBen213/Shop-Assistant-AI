@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class DashboardWelcome extends StatelessWidget {
   final String userName;
 
@@ -10,39 +12,57 @@ class DashboardWelcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Card(
-      elevation: 2,
+      elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(18),
         child: Row(
           children: [
-            const CircleAvatar(
-              radius: 28,
-              child: Icon(Icons.person, size: 30),
+            CircleAvatar(
+              radius: 38,
+              child: const Icon(
+                Icons.person,
+                size: 38,
+              ),
             ),
+
             const SizedBox(width: 18),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Welcome back 👋",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    "${l10n.welcomeBack} 👋",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  const SizedBox(height: 4),
+
+                  const SizedBox(height: 8),
+
                   Text(
-                    userName,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    userName.isEmpty
+                        ? l10n.storeOwner
+                        : userName,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notifications_none),
+
+            const Icon(
+              Icons.notifications_none,
+              size: 32,
             ),
           ],
         ),

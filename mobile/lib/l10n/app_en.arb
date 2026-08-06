@@ -1,0 +1,29 @@
+{
+  "@@locale": "en",
+
+  "dashboard": "Dashboard",
+  "settings": "Settings",
+
+  "welcomeBack": "Welcome back",
+  "storeOwner": "Store Owner",
+
+  "todayOverview": "Today's Overview",
+
+  "quickActions": "Quick Actions",
+
+  "todaySales": "Today's Sales",
+  "todayProfit": "Today's Profit",
+
+  "revenue": "Revenue",
+
+  "products": "Products",
+  "customers": "Customers",
+  "suppliers": "Suppliers",
+  "sales": "Sales",
+  "lowStock": "Low Stock",
+
+  "addProduct": "Add Product",
+  "newSale": "New Sale",
+  "addCustomer": "Add Customer",
+  "addSupplier": "Add Supplier"
+}

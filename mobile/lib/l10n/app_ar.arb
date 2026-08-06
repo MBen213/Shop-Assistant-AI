@@ -1,0 +1,29 @@
+{
+  "@@locale": "ar",
+
+  "dashboard": "لوحة التحكم",
+  "settings": "الإعدادات",
+
+  "welcomeBack": "مرحبًا بعودتك",
+  "storeOwner": "صاحب المتجر",
+
+  "todayOverview": "ملخص اليوم",
+
+  "quickActions": "الإجراءات السريعة",
+
+  "todaySales": "مبيعات اليوم",
+  "todayProfit": "ربح اليوم",
+
+  "revenue": "الإيرادات",
+
+  "products": "المنتجات",
+  "customers": "العملاء",
+  "suppliers": "الموردون",
+  "sales": "المبيعات",
+  "lowStock": "مخزون منخفض",
+
+  "addProduct": "إضافة منتج",
+  "newSale": "بيع جديد",
+  "addCustomer": "إضافة عميل",
+  "addSupplier": "إضافة مورد"
+}

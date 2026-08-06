@@ -15,7 +15,7 @@ import 'features/customers/presentation/providers/customers_provider.dart';
 import 'features/inventory/presentation/providers/inventory_provider.dart';
 import 'features/reports/presentation/providers/reports_provider.dart';
 import 'features/suppliers/presentation/providers/suppliers_provider.dart';
-
+import 'features/app_settings/presentation/providers/app_settings_provider.dart';
 
 
 Future<void> main() async {
@@ -40,7 +40,9 @@ Future<void> main() async {
               ..checkSession(),
         ),
 
-
+        ChangeNotifierProvider(
+         create: (_) => AppSettingsProvider(),
+        ),
 
         ChangeNotifierProvider(
           create: (_) =>

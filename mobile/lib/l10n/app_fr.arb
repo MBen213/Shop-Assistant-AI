@@ -1,0 +1,29 @@
+{
+  "@@locale": "fr",
+
+  "dashboard": "Tableau de bord",
+  "settings": "Paramètres",
+
+  "welcomeBack": "Bon retour",
+  "storeOwner": "Propriétaire",
+
+  "todayOverview": "Aperçu du jour",
+
+  "quickActions": "Actions rapides",
+
+  "todaySales": "Ventes du jour",
+  "todayProfit": "Profit du jour",
+
+  "revenue": "Revenu",
+
+  "products": "Produits",
+  "customers": "Clients",
+  "suppliers": "Fournisseurs",
+  "sales": "Ventes",
+  "lowStock": "Stock faible",
+
+  "addProduct": "Ajouter un produit",
+  "newSale": "Nouvelle vente",
+  "addCustomer": "Ajouter un client",
+  "addSupplier": "Ajouter un fournisseur"
+}
