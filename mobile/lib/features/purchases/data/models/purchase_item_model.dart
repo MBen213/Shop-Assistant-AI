@@ -8,21 +8,27 @@ class PurchaseItemModel extends PurchaseItem {
     required super.purchasePrice,
   });
 
-  factory PurchaseItemModel.fromMap(Map<String, dynamic> map) {
+  factory PurchaseItemModel.fromMap(
+    Map<String, dynamic> map,
+  ) {
     return PurchaseItemModel(
-      productId: map['productId'],
-      productName: map['productName'],
-      quantity: map['quantity'],
-      purchasePrice: (map['purchasePrice'] as num).toDouble(),
+      productId: map['product_id'] as String,
+      productName: map['product_name'] as String,
+      quantity: map['quantity'] as int,
+      purchasePrice:
+          (map['purchase_price'] as num).toDouble(),
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({
+    required String purchaseId,
+  }) {
     return {
-      'productId': productId,
-      'productName': productName,
+      'purchase_id': purchaseId,
+      'product_id': productId,
+      'product_name': productName,
       'quantity': quantity,
-      'purchasePrice': purchasePrice,
+      'purchase_price': purchasePrice,
     };
   }
 }

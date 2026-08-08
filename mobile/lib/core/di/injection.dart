@@ -1,12 +1,17 @@
 import 'package:get_it/get_it.dart';
 
+// ====================================================
+// Core
+// ====================================================
+
 import '../database/database_helper.dart';
+import '../database/dao/products_dao.dart';
 
 // ====================================================
 // Products
 // ====================================================
 
-import '../../features/products/data/datasource/product_remote_datasource.dart';
+import '../../features/products/data/datasource/product_local_datasource.dart';
 import '../../features/products/data/repositories/product_repository_impl.dart';
 
 import '../../features/products/domain/repositories/product_repository.dart';
@@ -51,20 +56,42 @@ import '../../features/dashboard/domain/usecases/get_dashboard_stats_usecase.dar
 
 import '../../features/dashboard/presentation/providers/dashboard_provider.dart';
 
+// ====================================================
+// App Settings
+// ====================================================
+
+import '../../features/app_settings/data/datasource/app_settings_local_datasource.dart';
+import '../../features/app_settings/data/repositories/app_settings_repository_impl.dart';
+
+import '../../features/app_settings/domain/repositories/app_settings_repository.dart';
+
+import '../../features/app_settings/domain/usecases/get_app_settings_usecase.dart';
+import '../../features/app_settings/domain/usecases/save_app_settings_usecase.dart';
+
+import '../../features/app_settings/presentation/providers/app_settings_provider.dart';
+
+// ====================================================
+// GetIt
+// ====================================================
+
 final sl = GetIt.instance;
 
+// ====================================================
+// Initialize Dependencies
+// ====================================================
+
 Future<void> initDependencies() async {
-  // ====================================================
-  // Database
-  // ====================================================
+  // ==================================================
+  // DATABASE
+  // ==================================================
 
   sl.registerLazySingleton<DatabaseHelper>(
     () => DatabaseHelper.instance,
   );
 
-  // ====================================================
-  // Users
-  // ====================================================
+  // ==================================================
+  // USERS
+  // ==================================================
 
   sl.registerLazySingleton<UserLocalDataSource>(
     () => UserLocalDataSource(),
@@ -75,6 +102,10 @@ Future<void> initDependencies() async {
       sl<UserLocalDataSource>(),
     ),
   );
+
+  // ------------------------------
+  // User UseCases
+  // ------------------------------
 
   sl.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
@@ -124,6 +155,10 @@ Future<void> initDependencies() async {
     ),
   );
 
+  // ------------------------------
+  // Auth Provider
+  // ------------------------------
+
   sl.registerFactory<AuthProvider>(
     () => AuthProvider(
       loginUseCase: sl<LoginUseCase>(),
@@ -131,6 +166,10 @@ Future<void> initDependencies() async {
       getCurrentUserUseCase: sl<GetCurrentUserUseCase>(),
     ),
   );
+
+  // ------------------------------
+  // Users Provider
+  // ------------------------------
 
   sl.registerFactory<UsersProvider>(
     () => UsersProvider(
@@ -142,14 +181,12 @@ Future<void> initDependencies() async {
     ),
   );
 
-  // ====================================================
-  // Dashboard
-  // ====================================================
+  // ==================================================
+  // DASHBOARD
+  // ==================================================
 
   sl.registerLazySingleton<DashboardLocalDataSource>(
-    () => DashboardLocalDataSource(
-      sl<DatabaseHelper>(),
-    ),
+    () => DashboardLocalDataSource(),
   );
 
   sl.registerLazySingleton<DashboardRepository>(
@@ -170,19 +207,25 @@ Future<void> initDependencies() async {
     )..loadDashboard(),
   );
 
-  // ====================================================
-  // Products
-  // ====================================================
+  // ==================================================
+  // PRODUCTS
+  // ==================================================
 
-  sl.registerLazySingleton<ProductRemoteDataSource>(
-    () => ProductRemoteDataSource(),
+  sl.registerLazySingleton<ProductLocalDataSource>(
+    () => ProductLocalDataSource(
+      ProductsDao.instance,
+    ),
   );
 
   sl.registerLazySingleton<ProductRepository>(
     () => ProductRepositoryImpl(
-      sl<ProductRemoteDataSource>(),
+      sl<ProductLocalDataSource>(),
     ),
   );
+
+  // ------------------------------
+  // Product UseCases
+  // ------------------------------
 
   sl.registerLazySingleton<GetProductsUseCase>(
     () => GetProductsUseCase(
@@ -208,12 +251,57 @@ Future<void> initDependencies() async {
     ),
   );
 
+  // ------------------------------
+  // Products Provider
+  // ------------------------------
+
   sl.registerFactory<ProductsProvider>(
     () => ProductsProvider(
       getProductsUseCase: sl<GetProductsUseCase>(),
       addProductUseCase: sl<AddProductUseCase>(),
       updateProductUseCase: sl<UpdateProductUseCase>(),
       deleteProductUseCase: sl<DeleteProductUseCase>(),
+    ),
+  );
+
+  // ==================================================
+  // APP SETTINGS
+  // ==================================================
+
+  sl.registerLazySingleton<AppSettingsLocalDataSource>(
+    () => AppSettingsLocalDataSource(),
+  );
+
+  sl.registerLazySingleton<AppSettingsRepository>(
+    () => AppSettingsRepositoryImpl(
+      sl<AppSettingsLocalDataSource>(),
+    ),
+  );
+
+  // ------------------------------
+  // App Settings UseCases
+  // ------------------------------
+
+  sl.registerLazySingleton<GetAppSettingsUseCase>(
+    () => GetAppSettingsUseCase(
+      sl<AppSettingsRepository>(),
+    ),
+  );
+
+  sl.registerLazySingleton<SaveAppSettingsUseCase>(
+    () => SaveAppSettingsUseCase(
+      sl<AppSettingsRepository>(),
+    ),
+  );
+
+  // ------------------------------
+  // App Settings Provider
+  // ------------------------------
+
+  sl.registerFactory<AppSettingsProvider>(
+    () => AppSettingsProvider(
+      getSettingsUseCase: sl<GetAppSettingsUseCase>(),
+      saveSettingsUseCase: sl<SaveAppSettingsUseCase>(),
     ),
   );
 }

@@ -9,6 +9,8 @@ import '../widgets/complete_sale_button.dart';
 import '../widgets/product_selector_tile.dart';
 import '../widgets/checkout/checkout_bottom_sheet.dart';
 
+import 'sales_history_page.dart';
+
 class SalesPage extends StatelessWidget {
   const SalesPage({super.key});
 
@@ -32,16 +34,31 @@ class _SalesView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Sales"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: "Sales History",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SalesHistoryPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
+
       body: provider.isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
           : Column(
               children: [
-                //============================
-                // Search
-                //============================
+                // ====================================================
+                // SEARCH
+                // ====================================================
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
@@ -69,9 +86,9 @@ class _SalesView extends StatelessWidget {
                   ),
                 ),
 
-                //============================
-                // Products Header
-                //============================
+                // ====================================================
+                // PRODUCTS HEADER
+                // ====================================================
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -102,9 +119,9 @@ class _SalesView extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-                //============================
-                // Products List
-                //============================
+                // ====================================================
+                // PRODUCTS LIST
+                // ====================================================
 
                 Expanded(
                   flex: 2,
@@ -117,7 +134,8 @@ class _SalesView extends StatelessWidget {
                       : ListView.builder(
                           itemCount: provider.products.length,
                           itemBuilder: (context, index) {
-                            final product = provider.products[index];
+                            final product =
+                                provider.products[index];
 
                             return ProductSelectorTile(
                               product: product,
@@ -131,9 +149,9 @@ class _SalesView extends StatelessWidget {
 
                 const Divider(),
 
-                //============================
-                // Cart Header
-                //============================
+                // ====================================================
+                // CART HEADER
+                // ====================================================
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -167,9 +185,9 @@ class _SalesView extends StatelessWidget {
                   ),
                 ),
 
-                //============================
-                // Cart List
-                //============================
+                // ====================================================
+                // CART LIST
+                // ====================================================
 
                 Expanded(
                   flex: 2,
@@ -182,7 +200,8 @@ class _SalesView extends StatelessWidget {
                       : ListView.builder(
                           itemCount: provider.cart.length,
                           itemBuilder: (context, index) {
-                            final item = provider.cart[index];
+                            final item =
+                                provider.cart[index];
 
                             return CartItemTile(
                               item: item,
@@ -200,9 +219,9 @@ class _SalesView extends StatelessWidget {
                         ),
                 ),
 
-                //============================
-                // Total
-                //============================
+                // ====================================================
+                // TOTAL
+                // ====================================================
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -215,9 +234,9 @@ class _SalesView extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                //============================
-                // Checkout Button
-                //============================
+                // ====================================================
+                // COMPLETE SALE
+                // ====================================================
 
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -230,23 +249,51 @@ class _SalesView extends StatelessWidget {
                         context: context,
                         isScrollControlled: true,
                         useSafeArea: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
+                        shape:
+                            const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(
                             top: Radius.circular(24),
                           ),
                         ),
-                        builder: (_) => CheckoutBottomSheet(
+                        builder: (_) =>
+                            CheckoutBottomSheet(
                           total: provider.total,
                           onConfirm: () async {
-                            await provider.completeSale();
+                            try {
+                              final sale =
+                                  await provider.completeSale();
 
-                            if (context.mounted) {
+                              if (!context.mounted) {
+                                return;
+                              }
+
+                              if (sale == null) {
+                                return;
+                              }
+
                               Navigator.pop(context);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
                                 const SnackBar(
                                   content: Text(
                                     "Sale completed successfully",
+                                  ),
+                                ),
+                              );
+                            } catch (e) {
+                              if (!context.mounted) {
+                                return;
+                              }
+
+                              Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Failed to complete sale: $e",
                                   ),
                                 ),
                               );

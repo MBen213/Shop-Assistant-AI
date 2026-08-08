@@ -6,7 +6,7 @@ import '../../domain/entities/purchase.dart';
 import '../../domain/usecases/add_purchase_usecase.dart';
 import '../../domain/usecases/delete_purchase_usecase.dart';
 import '../../domain/usecases/get_purchases_usecase.dart';
-import '../../../../core/database/database_helper.dart';
+import '../../../../core/database/dao/purchases_dao.dart';
 
 class PurchasesProvider extends ChangeNotifier {
   late final GetPurchasesUseCase _getPurchasesUseCase;
@@ -15,7 +15,7 @@ class PurchasesProvider extends ChangeNotifier {
 
   PurchasesProvider() {
     final datasource = PurchaseLocalDataSourceImpl(
-      DatabaseHelper.instance,
+      PurchasesDao.instance,
     );
 
     final repository = PurchaseRepositoryImpl(

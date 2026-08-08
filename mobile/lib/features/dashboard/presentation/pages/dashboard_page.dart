@@ -75,6 +75,30 @@ class DashboardPage extends StatelessWidget {
 
                 TodayOverview(
                   stats: stats,
+                  onSalesTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SalesPage(),
+                      ),
+                    );
+                  },
+                  onRevenueTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SalesPage(),
+                      ),
+                    );
+                  },
+                  onProfitTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SalesPage(),
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 24),
@@ -124,42 +148,119 @@ class DashboardPage extends StatelessWidget {
                   mainAxisSpacing: 15,
                   childAspectRatio: 0.95,
                   children: [
+                    // ==============================
+                    // PRODUCTS
+                    // ==============================
+
                     StatCard(
                       title: l10n.products,
                       value: stats.totalProducts.toString(),
                       icon: Icons.inventory_2,
                       color: Colors.blue,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ProductsPage(),
+                          ),
+                        );
+                      },
                     ),
+
+                    // ==============================
+                    // CUSTOMERS
+                    // ==============================
+
                     StatCard(
                       title: l10n.customers,
                       value: stats.totalCustomers.toString(),
                       icon: Icons.people,
                       color: Colors.orange,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const CustomersPage(),
+                          ),
+                        );
+                      },
                     ),
+
+                    // ==============================
+                    // SUPPLIERS
+                    // ==============================
+
                     StatCard(
                       title: l10n.suppliers,
                       value: stats.totalSuppliers.toString(),
                       icon: Icons.local_shipping,
                       color: Colors.indigo,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SuppliersPage(),
+                          ),
+                        );
+                      },
                     ),
+
+                    // ==============================
+                    // SALES
+                    // ==============================
+
                     StatCard(
                       title: l10n.sales,
                       value: stats.totalSales.toString(),
                       icon: Icons.shopping_cart,
                       color: Colors.green,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SalesPage(),
+                          ),
+                        );
+                      },
                     ),
+
+                    // ==============================
+                    // REVENUE
+                    // ==============================
+
                     StatCard(
                       title: l10n.revenue,
                       value:
                           "${stats.totalRevenue.toStringAsFixed(2)} DA",
                       icon: Icons.payments,
                       color: Colors.teal,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SalesPage(),
+                          ),
+                        );
+                      },
                     ),
+
+                    // ==============================
+                    // LOW STOCK
+                    // ==============================
+
                     StatCard(
                       title: l10n.lowStock,
                       value: stats.lowStockProducts.toString(),
                       icon: Icons.warning_amber_rounded,
                       color: Colors.red,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ProductsPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

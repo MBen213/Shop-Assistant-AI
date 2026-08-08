@@ -6,9 +6,7 @@ import 'app/app.dart';
 import 'core/di/injection.dart';
 
 import 'features/users/presentation/providers/auth_provider.dart';
-
 import 'features/dashboard/presentation/providers/dashboard_provider.dart';
-
 import 'features/products/presentation/providers/products_provider.dart';
 import 'features/sales/presentation/providers/sales_provider.dart';
 import 'features/customers/presentation/providers/customers_provider.dart';
@@ -17,90 +15,106 @@ import 'features/reports/presentation/providers/reports_provider.dart';
 import 'features/suppliers/presentation/providers/suppliers_provider.dart';
 import 'features/app_settings/presentation/providers/app_settings_provider.dart';
 
-
 Future<void> main() async {
+  // ====================================================
+  // Flutter Initialization
+  // ====================================================
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ====================================================
+  // Dependency Injection
+  // ====================================================
 
   await initDependencies();
 
-
+  // ====================================================
+  // Run Application
+  // ====================================================
 
   runApp(
-
     MultiProvider(
-
       providers: [
+        // ==================================================
+        // AUTH
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              sl<AuthProvider>()
-              ..checkSession(),
+        ChangeNotifierProvider<AuthProvider>(
+          create: (_) => sl<AuthProvider>()
+            ..checkSession(),
         ),
 
-        ChangeNotifierProvider(
-         create: (_) => AppSettingsProvider(),
+        // ==================================================
+        // APP SETTINGS
+        // ==================================================
+
+        ChangeNotifierProvider<AppSettingsProvider>(
+          create: (_) => sl<AppSettingsProvider>(),
         ),
 
-        ChangeNotifierProvider(
-          create: (_) =>
-              sl<DashboardProvider>()
-              ..loadDashboard(),
+        // ==================================================
+        // DASHBOARD
+        // ==================================================
+
+        ChangeNotifierProvider<DashboardProvider>(
+          create: (_) => sl<DashboardProvider>(),
         ),
 
+        // ==================================================
+        // PRODUCTS
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              sl<ProductsProvider>()
-              ..loadProducts(),
+        ChangeNotifierProvider<ProductsProvider>(
+          create: (_) => sl<ProductsProvider>()
+            ..loadProducts(),
         ),
 
+        // ==================================================
+        // SALES
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              SalesProvider(),
+        ChangeNotifierProvider<SalesProvider>(
+          create: (_) => SalesProvider(),
         ),
 
+        // ==================================================
+        // CUSTOMERS
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              CustomersProvider(),
+        ChangeNotifierProvider<CustomersProvider>(
+          create: (_) => CustomersProvider(),
         ),
 
+        // ==================================================
+        // INVENTORY
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              InventoryProvider(),
+        ChangeNotifierProvider<InventoryProvider>(
+          create: (_) => InventoryProvider(),
         ),
 
+        // ==================================================
+        // REPORTS
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              ReportsProvider(),
+        ChangeNotifierProvider<ReportsProvider>(
+          create: (_) => ReportsProvider(),
         ),
 
+        // ==================================================
+        // SUPPLIERS
+        // ==================================================
 
-
-        ChangeNotifierProvider(
-          create: (_) =>
-              SuppliersProvider(),
+        ChangeNotifierProvider<SuppliersProvider>(
+          create: (_) => SuppliersProvider(),
         ),
-
-
       ],
 
+      // ====================================================
+      // APP
+      // ====================================================
 
       child: const ShopAssistantApp(),
-
     ),
-
   );
-
 }

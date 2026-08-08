@@ -5,6 +5,7 @@ class StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final VoidCallback? onTap;
 
   const StatCard({
     super.key,
@@ -12,19 +13,20 @@ class StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.color,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
+    final card = Card(
+      elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
               radius: 30,
@@ -36,14 +38,18 @@ class StatCard extends StatelessWidget {
               ),
             ),
 
+            const SizedBox(height: 14),
+
             Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
                 fontWeight: FontWeight.bold,
+                fontSize: 17,
               ),
             ),
+
+            const SizedBox(height: 8),
 
             Text(
               value,
@@ -56,6 +62,16 @@ class StatCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+
+    if (onTap == null) {
+      return card;
+    }
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: onTap,
+      child: card,
     );
   }
 }

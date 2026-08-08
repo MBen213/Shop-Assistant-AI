@@ -1,4 +1,5 @@
-import '../../../../core/database/database_helper.dart';
+import '../../../../core/database/dao/purchases_dao.dart';
+
 import '../models/purchase_item_model.dart';
 import '../models/purchase_model.dart';
 
@@ -16,18 +17,24 @@ abstract class PurchaseLocalDataSource {
 
 class PurchaseLocalDataSourceImpl
     implements PurchaseLocalDataSource {
-  final DatabaseHelper databaseHelper;
+  final PurchasesDao purchasesDao;
 
   PurchaseLocalDataSourceImpl(
-    this.databaseHelper,
+    this.purchasesDao,
   );
 
   @override
   Future<void> addPurchase(
     PurchaseModel purchase,
   ) async {
-    await databaseHelper.insertPurchase(
-      purchase,
+    await purchasesDao.insertPurchase(
+      purchase.toMap(),
+      purchase.items.map(
+        (e) => (e as PurchaseItemModel).toMap(
+          purchaseId: purchase.id,
+        ),
+      )
+      .toList(),
     );
   }
 
@@ -35,21 +42,19 @@ class PurchaseLocalDataSourceImpl
   Future<void> deletePurchase(
     String id,
   ) async {
-    await databaseHelper.deletePurchase(
-      id,
-    );
+    await purchasesDao.deletePurchase(id);
   }
 
   @override
   Future<List<PurchaseModel>> getPurchases() async {
     final purchases =
-        await databaseHelper.getPurchases();
+        await purchasesDao.getPurchases();
 
     final List<PurchaseModel> result = [];
 
     for (final purchase in purchases) {
       final items =
-          await databaseHelper.getPurchaseItems(
+          await purchasesDao.getPurchaseItems(
         purchase['id'] as String,
       );
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import '../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
+import '../l10n/app_localizations.dart';
 
 import '../features/app_settings/presentation/providers/app_settings_provider.dart';
 
@@ -19,18 +20,26 @@ class ShopAssistantApp extends StatelessWidget {
           title: 'Shop Assistant AI',
           debugShowCheckedModeBanner: false,
 
-          // Theme
+          // ==================================================
+          // THEME
+          // ==================================================
+
           theme: AppTheme.lightTheme,
           darkTheme: ThemeData.dark(),
           themeMode: settings.flutterThemeMode,
 
-          // Language
+          // ==================================================
+          // LANGUAGE
+          // ==================================================
+
           locale: settings.locale,
+
           supportedLocales: const [
             Locale('en'),
             Locale('fr'),
             Locale('ar'),
           ],
+
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -38,7 +47,10 @@ class ShopAssistantApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
 
-          // Navigation
+          // ==================================================
+          // ROUTING
+          // ==================================================
+
           initialRoute: AppRouter.splash,
           routes: AppRouter.routes,
         );

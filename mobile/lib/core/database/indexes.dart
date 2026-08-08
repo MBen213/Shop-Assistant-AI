@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseIndexes {
   DatabaseIndexes._();
 
-  static Future<void> create(Database db) async {
+  static Future<void> create(DatabaseExecutor db) async {
     await db.execute(
       '''
       CREATE INDEX IF NOT EXISTS idx_products_barcode

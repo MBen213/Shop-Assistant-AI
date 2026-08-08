@@ -28,9 +28,7 @@ class QuickActions extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
         ),
-
         const SizedBox(height: 16),
-
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -45,21 +43,18 @@ class QuickActions extends StatelessWidget {
               color: Colors.green,
               onTap: onNewSale,
             ),
-
             _QuickActionCard(
               title: l10n.addProduct,
               icon: Icons.inventory_2,
               color: Colors.blue,
               onTap: onAddProduct,
             ),
-
             _QuickActionCard(
               title: l10n.addCustomer,
               icon: Icons.people,
               color: Colors.orange,
               onTap: onAddCustomer,
             ),
-
             _QuickActionCard(
               title: l10n.addSupplier,
               icon: Icons.local_shipping,
@@ -104,15 +99,13 @@ class _QuickActionCard extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: color.withOpacity(.15),
+                backgroundColor: color.withValues(alpha: 0.15),
                 child: Icon(
                   icon,
                   color: color,
                 ),
               ),
-
               const SizedBox(width: 12),
-
               Expanded(
                 child: Text(
                   title,
